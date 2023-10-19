@@ -59,16 +59,66 @@ func main() {
 		return
 	}
 	pendu := pendu("hangman.txt")
-
 	fmt.Printf("\n")
-	nindex := len(rand)/2 - 1
-	nlettre := string(rand[nindex])
+	nindex1 := int(len(rand) - 1)
+	nindex2 := 0
+	nindex3 := int(len(rand) / 2)
+	nlettre1 := string(rand[nindex1])
+	nlettre2 := string(rand[nindex2])
+	nlettre3 := string(rand[nindex3])
 	dash := make([]string, len(rand))
-	for i := 0; i < len(rand); i++ {
-		if i != nindex {
-			dash[i] = "_"
+	var n int
+	var z string
+	p := "p"
+	jeu := false
+	fmt.Println("Bienvenue au Jeu du Pendu")
+	for !jeu {
+		fmt.Print("Pour Commencer Appuyer sur P puis sur Entrer ")
+		fmt.Scan(&z)
+		if p == z {
+			jeu = true
 		} else {
-			dash[i] = nlettre
+			continue
+		}
+	}
+	fmt.Println("1 : facile")
+	fmt.Println("2 : moyen")
+	fmt.Println("3 : difficile")
+	fmt.Println("4 : extreme")
+	fmt.Print("Choisissez votre difficulté (1 à 4) :")
+	fmt.Scan(&n)
+	if n == 1 && len(rand) < 5 {
+		fmt.Print("Vous ne pouvez pas choisir le niveau 1 car le mot fait moins de 5 lettres")
+		fmt.Print("Difficulté (1 à 4) :")
+		fmt.Scan(&n)
+	}
+	for i := 0; i < len(rand); i++ {
+		if n == 1 && len(rand) > 5 {
+			if i == nindex1 {
+				dash[i] = nlettre1
+			} else if i == nindex2 {
+				dash[i] = nlettre2
+			} else if i == nindex3 {
+				dash[i] = nlettre3
+			} else {
+				dash[i] = "_"
+			}
+		} else if n == 2 {
+			if i == nindex1 {
+				dash[i] = nlettre1
+			} else if i == nindex2 {
+				dash[i] = nlettre2
+			} else {
+				dash[i] = "_"
+			}
+		} else if n == 3 {
+			if i == nindex3 {
+				dash[i] = nlettre3
+			} else {
+				dash[i] = "_"
+			}
+		} else if n == 4 {
+			dash[i] = "_"
 		}
 	}
 	fmt.Println(strings.Join(dash, " "))
