@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// la fonction random va prendre un mot au hasard dans le fichier words.txt
 func random(filename string) (string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -32,6 +33,7 @@ func random(filename string) (string, error) {
 	return rand, nil
 }
 
+// la fonction pendu va spliter les differentes positions du hangman dans le fichier hangman.txt pour qu'on puisse les appeler une par une
 func pendu(filename string) []string {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -60,6 +62,8 @@ func main() {
 	}
 	pendu := pendu("hangman.txt")
 	fmt.Printf("\n")
+	// ici on defini les diferents index pour les differents niveaux
+	// pour le niveau 1, 1 lettre s'affiche, niveau 2, 2 lettes et comme ça jusqu'au niveau 4
 	nindex1 := int(len(rand) - 1)
 	nindex2 := 0
 	nindex3 := int(len(rand) / 2)
@@ -71,10 +75,12 @@ func main() {
 	var z string
 	p := "p"
 	jeu := false
+	// ici on a une boucle qui ne s'arrete pas tant que l'on appuie pas sur la lettre p
 	fmt.Println("Bienvenue au Jeu du Pendu")
 	for !jeu {
-		fmt.Print("Pour Commencer Appuyer sur P puis sur Entrer ")
+		fmt.Print("Pour commencer appuyer sur P puis sur Entrer ")
 		fmt.Scan(&z)
+		z = strings.ToLower(z)
 		if p == z {
 			jeu = true
 		} else {
@@ -85,13 +91,24 @@ func main() {
 	fmt.Println("2 : moyen")
 	fmt.Println("3 : difficile")
 	fmt.Println("4 : extreme")
-	fmt.Print("Choisissez votre difficulté (1 à 4) :")
-	fmt.Scan(&n)
+	affich := false
+	// cette boucle permet d'eviter les valeurs incorrect, on ne peut passer la boucle que si la valeur entrer est compris entre 0 et 4
+	for !affich {
+		fmt.Print("Choisissez votre difficulté (1 à 4) :")
+		fmt.Scan(&n)
+		if n > 0 && n < 5 {
+			affich = true
+		} else {
+			continue
+		}
+	}
+	// cette condition permet de ne pas utiliser le niveau 1 si le mot fait moins de 5 lettres
 	if n == 1 && len(rand) < 5 {
 		fmt.Print("Vous ne pouvez pas choisir le niveau 1 car le mot fait moins de 5 lettres")
 		fmt.Print("Difficulté (1 à 4) :")
 		fmt.Scan(&n)
 	}
+	// cette boucle affiche le nombre de lettres au hasard en fonction du niveau choisi
 	for i := 0; i < len(rand); i++ {
 		if n == 1 && len(rand) > 5 {
 			if i == nindex1 {
@@ -129,7 +146,11 @@ func main() {
 		fmt.Print("Entrez une lettre : ")
 		var mot string
 		fmt.Scan(&mot)
+		// ici on passe la lettre en minuscule si jamais le joueur entre unen lettre majuscule
+		mot = strings.ToLower(mot)
+		fmt.Print("\n")
 		egale := false
+		// ici on verifie si la lettre entrée est presente dans le mot
 		for i := 0; i < len(rand); i++ {
 			if mot[0] == rand[i] {
 				dash[i] = mot
@@ -137,24 +158,27 @@ func main() {
 				egale = true
 			}
 		}
+		// si la variable verif est false c'est à dire que la lettre n'est pas dans le mot on reduit le compteur
 		if !verif {
 			rest--
 			fmt.Println("Essai restant :", rest)
 		}
+		// ici on affiche la position du hangman correspondante au nombre d'essai restant
 		if rest >= 0 && rest < len(pendu) {
 			if !egale {
 				pendu[rest] += "========"
 				fmt.Println(pendu[rest])
 			}
 		}
+		// ici si le nombre d'essai restant est epuisé on break pour terminer le jeu et on affiche perdu
 		if rest == 0 {
 			fmt.Println("Vous avez perdu, le mot était :", rand)
 			break
 		}
 		fmt.Println(strings.Join(dash, " "))
-
+		// ici on verifie si toutes les lettres du mot à chercher on bien été trouvé si c'est le cas on print le mot est on break
 		if !strings.Contains(strings.Join(dash, ""), "_") {
-			fmt.Println("Bravo !!")
+			fmt.Println("Bravo, le mot était", rand)
 			break
 		}
 	}
