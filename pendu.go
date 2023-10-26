@@ -102,13 +102,8 @@ func main() {
 			continue
 		}
 	}
-	// cette condition permet de ne pas utiliser le niveau 1 si le mot fait moins de 5 lettres
-	if n == 1 && len(rand) < 5 {
-		fmt.Print("Vous ne pouvez pas choisir le niveau 1 car le mot fait moins de 5 lettres")
-		fmt.Print("Difficulté (1 à 4) :")
-		fmt.Scan(&n)
-	}
 	// cette boucle affiche le nombre de lettres au hasard en fonction du niveau choisi
+	fmt.Print("Voici le mot à trouver: ")
 	for i := 0; i < len(rand); i++ {
 		if n == 1 && len(rand) > 5 {
 			if i == nindex1 {
@@ -141,13 +136,16 @@ func main() {
 	fmt.Println(strings.Join(dash, " "))
 	fmt.Println("Bonne chance, vous avez 10 essais")
 	rest := len(pendu) - 1
+	var list []string
 	for {
 		verif := false
+		fmt.Println("Lettre déjà entrée:", list)
 		fmt.Print("Entrez une lettre : ")
 		var mot string
 		fmt.Scan(&mot)
 		// ici on passe la lettre en minuscule si jamais le joueur entre unen lettre majuscule
 		mot = strings.ToLower(mot)
+		list = append(list, mot) //liste qui permet de stocker les lettres entrées
 		fmt.Print("\n")
 		egale := false
 		// ici on verifie si la lettre entrée est presente dans le mot
@@ -161,6 +159,7 @@ func main() {
 		// si la variable verif est false c'est à dire que la lettre n'est pas dans le mot on reduit le compteur
 		if !verif {
 			rest--
+			fmt.Println("--------------------------------------------")
 			fmt.Println("Essai restant :", rest)
 		}
 		// ici on affiche la position du hangman correspondante au nombre d'essai restant
