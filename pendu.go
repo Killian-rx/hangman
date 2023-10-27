@@ -62,8 +62,8 @@ func main() {
 	}
 	pendu := pendu("hangman.txt")
 	fmt.Printf("\n")
-	// ici on defini les diferents index pour les differents niveaux
-	// pour le niveau 1, 1 lettre s'affiche, niveau 2, 2 lettes et comme ça jusqu'au niveau 4
+	// ici on defini les differents index pour les differents niveaux
+	// pour le niveau 1, 3 lettre s'affiche, niveau 2, 2 lettes et comme ça jusqu'au niveau 4
 	nindex1 := int(len(rand) - 1)
 	nindex2 := 0
 	nindex3 := int(len(rand) / 2)
